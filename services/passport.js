@@ -8,6 +8,14 @@ const User = mongoose.model('users');
 passport.serializeUser((user, done) => {
     done(null, user.id); // done is callback when we've finished work
     // (error obj or if we ran into errors, identify user for follow-up requests)
+    // user.id is mongoDB user ID stored on database (assume every user will have a User ID)
+});
+
+passport.deserializeUser((id, done) => {
+    User.findById(id)
+        .then(user => { // promise takes user model we just desync'd
+            done(null, user)
+    });
 });
 
 passport.use(new GoogleStrategy({ 
